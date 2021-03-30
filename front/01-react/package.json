@@ -1,0 +1,13 @@
+{
+  "name": "01-react",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@umijs/preset-react": "^1.8.0",
+    "umi": "^3.3.9"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.5.0"
+  }
+}

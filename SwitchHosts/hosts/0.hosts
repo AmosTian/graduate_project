@@ -1,0 +1,4 @@
+#@SwitchHosts! {"url": null, "icon_idx": 0, "title": "\u5f00\u53d1\u73af\u5883"}
+# 开发环境
+127.0.0.1 manage.haoke.com
+127.0.0.1 image.haoke.com

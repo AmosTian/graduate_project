@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>haoke-manage</artifactId>
+        <groupId>com.haoke.manage</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>haoke-manage-api-server</artifactId>
+
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>bintray-andimarek-graphql-java</id>
+            <name>bintray</name>
+            <url>https://dl.bintray.com/andimarek/graphql-java</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!--springboot的web支持-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!--
+            api模块———本模块，对外提供接口，作为dubbo的服务消费方
+            interface模块————当前依赖，dubbo的服务提供方
+        -->
+        <dependency>
+            <groupId>com.haoke.manage</groupId>
+            <artifactId>haoke-manage-dubbo-server-house-resources-interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.9</version>
+        </dependency>
+        <!--导入腾讯云COS依赖-->
+        <dependency>
+            <groupId>com.qcloud</groupId>
+            <artifactId>cos_api</artifactId>
+            <version>5.6.37</version>
+        </dependency>
+        <!--引入配置自动注入-->
+        <dependency>
+            <groupId> org.springframework.boot </groupId>
+            <artifactId> spring-boot-configuration-processor </artifactId>
+            <optional> true </optional>
+        </dependency>
+
+        <!--导入graphql依赖-->
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java</artifactId>
+            <version>16.0</version>
+        </dependency>
+
+        <!--ad依赖-->
+        <dependency>
+            <groupId>com.haoke.manage</groupId>
+            <artifactId>haoke-manage-dubbo-server-ad-interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>

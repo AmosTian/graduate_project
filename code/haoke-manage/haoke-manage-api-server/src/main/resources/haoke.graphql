@@ -1,0 +1,57 @@
+schema {
+    query: HaokeQuery
+}
+
+type HaokeQuery{
+    #分页查询房源信息-应用于前台房源信息
+    HouseResourcesList(page:Int, pageSize:Int):TableResult
+    # 通过Id查询房源信息
+    HouseResources(id:ID): HouseResources
+
+    #首页广告图-应用于前台首页
+    IndexAdList: IndexAdResult
+}
+
+type HouseResources{
+    id:ID!
+    title:String
+    estateId:ID
+    buildingNum:String
+    buildingUnit:String
+    buildingFloorNum:String
+    rent:Int
+    rentMethod:Int
+    paymentMethod:Int
+    houseType:String
+    coveredArea:String
+    useArea:String
+    floor:String
+    orientation:String
+    decoration:Int
+    facilities:String
+    pic:String
+    houseDesc:String
+    contact:String
+    mobile:String
+    time:Int
+    propertyCost:String
+}
+
+type TableResult{
+    list: [HouseResources]
+    pagination: Pagination
+}
+
+type Pagination{
+    current:Int
+    pageSize:Int
+    total:Int
+}
+
+type IndexAdResult{
+    list: [IndexAdResultData]
+}
+
+type IndexAdResultData{
+    original: String
+}

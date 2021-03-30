@@ -1,0 +1,15 @@
+#@SwitchHosts! {"url": null, "icon_idx": 0, "title": "COMMON.hosts"}
+# common
+127.0.0.1 www.techsmith.com
+127.0.0.1 activation.cloud.techsmith.com
+127.0.0.1 oscount.techsmith.com
+127.0.0.1 updater.techsmith.com
+127.0.0.1 camtasiatudi.techsmith.com
+127.0.0.1 tsccloud.cloudapp.net
+127.0.0.1 assets.cloud.techsmith.com
+
+0.0.0.0 account.jetbrains.com
+
+192.168.40.133 node01
+192.168.40.134 node02
+192.168.40.135 node03
