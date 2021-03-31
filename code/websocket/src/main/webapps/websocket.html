@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TestWebSocket</title>
+</head>
+<body>
+<script>
+    const socket = new WebSocket("ws://127.0.0.1:8082/websocket/uuu");
+
+    socket.onopen = (ws) =>{
+        console.log("建立连接",ws)
+    }
+
+    socket.onmessage =(ws)=>{
+        console.log("接收到消息 >> ",ws.data);
+    }
+
+    socket.onclose = (ws) =>{
+        console.log("连接已断开！", ws);
+    }
+
+    socket.onerror = (ws) => {
+        console.log("发送错误！", ws);
+    }
+
+    // 2秒后向服务端发送消息
+    setTimeout(()=>{
+        socket.send("js客户端发送一条测试消息");
+    },2000);
+    // 5秒后断开连接
+    setTimeout(()=>{
+        socket.close();
+    },5000);
+
+
+</script>
+</body>
+</html>
