@@ -31,48 +31,53 @@ class Chat extends React.Component {
     let {to_user,from_user,avatar} = this.props.chatInfo;
     let pdata = {
       id: this.guid(),
-      from_user: from_user,
-      to_user: to_user,
+      fromId: from_user,
+      to:{
+        id:this.state.toId
+      },
+      toId:to_user,
       avatar: avatar,
-      chat_msg: this.state.msgContent
+      msg: this.state.msgContent
     }
     let newList = [...this.state.infos];
     newList.push(pdata);
     this.setState({
-      infos: newList
+      infos: newList,
+      msgContent:null
     })
-
     this.state.client.emitEvent(IMEvent.MSG_TEXT_SEND,JSON.stringify(pdata));
   }
   componentDidMount = () => {
     let {to_user,from_user} = this.props.chatInfo;
-    axios.post('/chats/info',{
-      to_user: to_user,
-      from_user: from_user
+    axios.get('http://127.0.0.1:9092/message',{params:{
+        toId: to_user,
+        fromId: from_user
+      }
     }).then(data=>{
       this.setState({
-        infos: data.data.list,
+        infos: data,
         isLoading: true,
-        client: handle(localStorage.getItem('uid'),(data)=>{
+        client: handle(from_user,(data)=>{//等待接收 data-接收到的实时
           let newList = [...this.state.infos];
-          newList.push(JSON.parse(data.content));
+          newList.push(JSON.parse(data));
           this.setState({
             infos: newList
           })
+          console.log(this.state.infos)
         })
       });
     })
   }
   render() {
-    let {username} = this.props.chatInfo;
+    let {username,from_user} = this.props.chatInfo;
     let infoList = null;
     if(this.state.isLoading) {
-      let currentUser = parseInt(localStorage.getItem('uid'),10);
+      let currentUser = parseInt(from_user,10);
       infoList = this.state.infos.map(item=>{
         return (
-          <li key={item.id} className={currentUser===item.from_user? 'chat-info-left':'chat-info-right'}>
-            <img src={config.imgBaseUrl + item.avatar} alt=""/>
-            <span>{item.chat_msg}</span>
+          <li key={item.id} className={currentUser===item.to.id? 'chat-info-left':'chat-info-right'}>
+            <img src= "https://haoke-1257323542.cos.ap-beijing.myqcloud.com/mock-data/avatar.png" />
+            <span>{item.msg}</span>
           </li>
         )
       })

@@ -5,35 +5,40 @@ import IMEvent from "./IMEvent.js"
  * 通讯客户端
  */
 class IMClient {
-  constructor(url) {
-      this._url = url;
-      this._autoConnect = true;
-      this._handlers = {};
-      this._DataPacketQueue = [];
-      this._isOpened = false;
+  constructor(url, onMyMessage) {
+    this._url = url;
+    this._autoConnect = true;
+    this._handlers = {};
+    this._DataPacketQueue = [];
+    this._isOpened = false;
+    this.onMyMessage = onMyMessage;
 
-      this.addEventListener(IMEvent.CONNECTED, () => {
-        this.serverOnConnected();
-      })
+    this.addEventListener(IMEvent.CONNECTED, () => {
+      this.serverOnConnected();
+    })
 
-      // this.addEventListener(IMEvent.CONNECTED, () => {
-      //   this.clearMsgQueue();
-      // })
+    // this.addEventListener(IMEvent.CONNECTED, () => {
+    //   this.clearMsgQueue();
+    // })
 
-      this.addEventListener(IMEvent.DISCONNECTED, () => {
-        this.serverOnDisconnected();
-      })
-    }
-    /**
-     * 底层通讯函数回调
-     */
-    // 连接
+    this.addEventListener(IMEvent.DISCONNECTED, () => {
+      this.serverOnDisconnected();
+    })
+  }
+  /**
+   * 底层通讯函数回调
+   */
+  // 连接
   connect() {
     if (!this._socket) {
       this._socket = new WebSocket(this._url);
 
       this._socket.onmessage = (evt) => {
         this.onMessage(evt.data);
+
+        if(this.onMyMessage){
+          this.onMyMessage(evt.data);
+        }
       }
       this._socket.onopen = (ws) => {
         this.onOpen(ws);
@@ -82,11 +87,13 @@ class IMClient {
 
   // 向服务器发送数据包
   sendDataPacket(dataPacket) {
-    if (this._isOpened) {
-      this._socket.send(dataPacket.rawMessage);
-    } else {
-      this._DataPacketQueue.push(dataPacket);
-    }
+    // if (this._isOpened) {
+    //   this._socket.send(dataPacket.rawMessage);
+    // } else {
+    //   this._DataPacketQueue.push(dataPacket);
+    // }
+    // 直接发送，不包装
+    this._socket.send(dataPacket);
   }
 
   /**
@@ -129,7 +136,7 @@ class IMClient {
 
   /**
    * 添加事件监听
-   * 
+   *
    * @param {string} type 事件类型
    * @param {Function} callback 事件处理函数
    */
@@ -142,9 +149,9 @@ class IMClient {
 
   /**
    * 移除事件
-   * 
+   *
    * @param {string} type 事件类型
-   * @param {*} callback 
+   * @param {*} callback
    */
   removeEventListener(type, handler) {
     if (this._handlers[type] && this._handlers[type].length > 0) {
