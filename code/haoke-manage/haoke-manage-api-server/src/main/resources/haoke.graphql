@@ -10,6 +10,9 @@ type HaokeQuery{
 
     #首页广告图-应用于前台首页
     IndexAdList: IndexAdResult
+
+    #地图查房房源数据
+    MapHouseData(lng:Float,lat:Float,zoom:Int):MapHouseDataResult
 }
 
 type HouseResources{
@@ -54,4 +57,13 @@ type IndexAdResult{
 
 type IndexAdResultData{
     original: String
+}
+
+type MapHouseDataResult{
+    list:[MapHouseXY]
+}
+
+type MapHouseXY{
+    x:Float
+    y:Float
 }

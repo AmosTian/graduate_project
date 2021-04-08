@@ -1,20 +1,74 @@
 import React from 'react';
 import { Icon} from 'semantic-ui-react'
+import { ApolloClient, gql , InMemoryCache} from '@apollo/client';
+
+const client = new ApolloClient({
+  uri: "http://127.0.0.1:9091/graphql",
+  cache: new InMemoryCache()
+});
+
+//定义查询
+const GET_MAP_HOUSE = gql`
+  query queryMapHouseData($lng:Float,$lat:Float,$zoom:Int){
+    MapHouseData(lng:$lng,lat:$lat,zoom:$zoom){
+      list{
+        x
+        y
+      }
+    }
+  }
+`;
+
+// 百度地图API功能
+const BMap = window.BMap;
+const BMapLib = window.BMapLib;
+
+const showMapMarker =(xys,map)=>{
+  let markers = [];
+  let pt = null;
+  for (let i in xys) {
+    pt = new BMap.Point(xys[i].x, xys[i].y);
+    markers.push(new BMap.Marker(pt));
+  }
+
+  // 地图上覆盖物的聚合效果
+  var markerClusterer = new BMapLib.MarkerClusterer(map, {
+    markers: markers,
+    girdSize: 100,
+    styles: [{
+      background: 'rgba(12,181,106,0.9)',
+      size: new BMap.Size(92, 92),
+      textSize: '16',
+      textColor: '#fff',
+      borderRadius: 'true'
+    }],
+  });
+  markerClusterer.setMaxZoom(50);
+  markerClusterer.setGridSize(50);
+}
+
 class MapHouse extends React.Component {
   constructor(props) {
     super(props);
   }
   componentDidMount() {
-    // 百度地图API功能
-    var BMap = window.BMap;
-    var BMapLib = window.BMapLib;
+
+    //设置初始中心点
+    let defaultX = 121.48130241985999;
+    let defaultY = 31.235156971414239;
+    let defaultZoom = 12;
+
     // 创建Map实例
-    var map = new BMap.Map("allmap"); 
+    let map = new BMap.Map("allmap");
     // 初始化地图,设置中心点坐标和地图级别
-    map.centerAndZoom(new BMap.Point(116.43244, 39.929986), 12); 
+    map.centerAndZoom(new BMap.Point(defaultX,defaultY), defaultZoom);
+
+    // 开启鼠标滚轮缩放
+    map.enableScrollWheelZoom(true);
+
     // 添加地图类型控件
-    map.addControl(new BMap.MapTypeControl()); 
-    // 设置地图缩放
+    map.addControl(new BMap.MapTypeControl());
+    // 设置地图缩放比例尺控件
     map.addControl(new BMap.ScaleControl({
       anchor: window.BMAP_NAVIGATION_CONTROL_ZOOM
     }));
@@ -25,11 +79,37 @@ class MapHouse extends React.Component {
     // 设置缩略图控件。
     map.addControl(new BMap.OverviewMapControl());
     // 设置地图显示的城市 此项是必须设置的
-    map.setCurrentCity("北京"); 
-    // 开启鼠标滚轮缩放
-    map.enableScrollWheelZoom(true); 
-    // 测试数据
-    var xy = [{
+    map.setCurrentCity("上海");
+
+
+    /*拖拽事件，更新范围内房源
+    * 获取中心点，取数据，更新地图
+    * */
+    let showInfo = () => {
+      let cp = map.getCenter();
+      let zoom = map.getZoom(); //缩放级别
+      // console.log(cp.lng + "," + cp.lat+" --> " + zoom);
+      client.query({query: GET_MAP_HOUSE, variables: {"lng":cp.lng,"lat":cp.lat,"zoom":zoom}}).then(
+          result =>{
+            let xys = result.data.MapHouseData.list;
+            showMapMarker(xys,map);
+      });
+    }
+
+    map.addEventListener("dragstart",()=>{map.clearOverlays();}); //拖动开始事件
+    map.addEventListener("dragend",showInfo); //拖动结束事件
+    map.addEventListener("zoomstart", ()=>{map.clearOverlays();}); //缩放开始事件
+    map.addEventListener("zoomend",showInfo); //缩放结束事件
+
+    /*map.addEventListener("dragend", function showInfo(){
+      let cp = map.getCenter();
+      let zoom = map.getZoom(); //缩放级别
+      console.log(cp.lng + "," + cp.lat+" --> " + zoom);
+    });*/
+
+    /*// 测试数据
+    var xy = [
+        {
       'x': 116.43244,
       'y': 39.929986
     }, {
@@ -65,27 +145,13 @@ class MapHouse extends React.Component {
     }, {
       'x': 116.380178,
       'y': 39.953053
-    }];
-    var markers = [];
-    var pt = null;
-    for (var i in xy) {
-      pt = new BMap.Point(xy[i].x, xy[i].y);
-      markers.push(new BMap.Marker(pt));
-    }
-    // 地图上覆盖物的聚合效果
-    var markerClusterer = new BMapLib.MarkerClusterer(map, {
-      markers: markers,
-      girdSize: 100,
-      styles: [{
-        background: 'rgba(12,181,106,0.9)',
-        size: new BMap.Size(92, 92),
-        textSize: '16',
-        textColor: '#fff',
-        borderRadius: 'true'
-      }],
+    }];*/
+    /*初始化*/
+    client.query({query: GET_MAP_HOUSE,variables: {"lng":defaultX,"lat":defaultY,"zoom":defaultZoom}}).then(
+        result =>{
+      let xys = result.data.MapHouseData.list;
+      showMapMarker(xys,map)
     });
-    markerClusterer.setMaxZoom(50);
-    markerClusterer.setGridSize(10);
   }
   render() {
     return ( 

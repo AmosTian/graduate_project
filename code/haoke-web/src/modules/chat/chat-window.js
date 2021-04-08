@@ -4,7 +4,6 @@ import './chat-window.css';
 import axios from 'axios';
 import handle from './wsmain.js';
 import IMEvent from './IMEvent.js'
-import config from '../../common.js';
 
 class Chat extends React.Component {
   constructor(props) {
