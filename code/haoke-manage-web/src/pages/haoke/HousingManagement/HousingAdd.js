@@ -28,8 +28,8 @@ const estateMap = new Map([
   ['上海阳城','1005|上海市,上海市,闵行区,罗锦路888弄']
 ]);
 
-
-@connect(({ loading }) => ({
+@connect(({ house, loading }) => ({
+  house,
   submitting: loading.effects['form/submitRegularForm'],
 }))
 @Form.create()
@@ -57,9 +57,10 @@ class HousingAdd extends PureComponent {
         delete values.houseType_4;
         delete values.houseType_5;
 
+        console.log(values)
         values.pic = [...this.state.pics].join(',');
         dispatch({
-          type: 'house/submitHouseForm',
+          type: 'house/addHousing',
           payload: values,
         });
       }
@@ -120,15 +121,12 @@ class HousingAdd extends PureComponent {
         md: { span: 10 },
       },
     };
-
     const submitFormLayout = {
       wrapperCol: {
         xs: { span: 24, offset: 0 },
         sm: { span: 10, offset: 7 },
       },
     };
-
-
 
     return (
       <PageHeaderWrapper>
@@ -273,6 +271,7 @@ class HousingAdd extends PureComponent {
             </FormItem>
           </Card>
           <Card bordered={false} title="出租信息">
+
             <FormItem {...formItemLayout} label="联系人">
               <InputGroup compact>
                 {getFieldDecorator('contact',{rules:[{ required: true, message:"此项为必填项" }]})

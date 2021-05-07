@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
@@ -27,8 +28,7 @@ public class PicUploadFileSystemService {
         // 校验图片格式,属于图片，则允许上传
         boolean isLegal = false;
         for (String type : IMAGE_TYPE) {
-            if(StringUtils.endsWithIgnoreCase
-                    (uploadFile.getOriginalFilename(),type)) {
+            if(StringUtils.endsWithIgnoreCase(uploadFile.getOriginalFilename(),type)) {
                 isLegal = true;
                 break;
             }
@@ -50,6 +50,16 @@ public class PicUploadFileSystemService {
                         filePath,"E:\\idea\\graduateProject\\code\\upload"),"\\", "/");
         fileUploadResult.setName("http://image.haoke.com" + picUrl);
         File newFile = new File(filePath);
+
+//        try (FileOutputStream fileOutputStream = new FileOutputStream(newFile)) {
+//            fileOutputStream.write(uploadFile.getBytes());
+//            fileOutputStream.flush();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            //上传失败
+//            fileUploadResult.setStatus("error");
+//            return fileUploadResult;
+//        }
 
         // 写文件到磁盘
         try {

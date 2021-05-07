@@ -1,0 +1,220 @@
+<div class="layuimini-container layuimini-page-anim">
+    <div class="layuimini-main">
+
+        <fieldset class="table-search-fieldset">
+            <legend>搜索信息</legend>
+            <div style="margin: 10px 10px 10px 10px">
+                <form class="layui-form layui-form-pane" action="">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">id</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="username" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户性别</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="sex" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户城市</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="city" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">用户职业</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="classify" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="submit" class="layui-btn layui-btn-primary"  lay-submit lay-filter="data-search-btn"><i class="layui-icon"></i> 搜 索</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+        <!--行工具栏-->
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-normal layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+
+    </div>
+
+</div>
+
+
+
+<script>
+    var json;
+    layui.use(['form', 'table','miniPage','element'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table,
+            miniPage = layui.miniPage;
+
+        table.render({
+            elem: '#currentTableId',
+            url: 'http://localhost:9091/bg/house/resources/alllist',
+            toolbar: '#toolbarDemo',
+            defaultToolbar: ['filter', 'exports', 'print'],
+            cols: [[
+                {type: "checkbox", width: 50},
+                {field: 'id', width: 60, title: 'ID', sort: true},
+                {field: 'title', maxwidth:160,title: '房源信息'},
+                {field: 'pic', width: 50, title: '图',templet: '#picTpl'},
+                {field: 'paymentMethod', width: 100, title: '支付方式',templet: '#paymethod'},
+                {field: 'sign', minwidth:160, title: '楼栋',templet: '#building'},
+                {field: 'houseType', minwidth: 160, title: '户型'},
+                {field: 'coveredArea', width: 80, title: '面积', sort: true},
+                {field: 'floor', title: '楼层', maxWidth: 150},
+                {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+            ]],
+            limits:[5,10,15,20,25,30],
+            cur:1,
+            limit:5,
+            page: true,
+            skin: 'line',
+            parseData: function (res) { //将原始数据解析成 table 组件所规定的数据，res为从url中get到的数据
+                // console.log(res)
+                var result;
+                // console.log(JSON.stringify(res));
+                if (this.page.curr) {
+                    result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+                }
+                else {
+                    result = res.data.slice(0, this.limit);
+                }
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.count, //解析数据长度
+                    "data": result //解析数据列表
+                };
+            }
+        });
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            var result = JSON.stringify(data.field);
+            layer.alert(result, {
+                title: '最终的搜索信息'
+            });
+
+            //执行搜索重载
+            table.reload('currentTableId', {
+                page: {
+                    curr: 1
+                }
+                , where: {
+                    searchParams: result
+                }
+            }, 'data');
+
+            return false;
+        });
+
+        //监听表格复选框选择
+        table.on('checkbox(currentTableFilter)', function (obj) {
+            console.log(obj)
+        });
+
+        table.on('tool(currentTableFilter)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                var content = miniPage.getHrefContent("page/housing/housingEdit.html");
+                var openWH = miniPage.getOpenWidthHeight();
+
+                json = JSON.stringify(data);
+                layer.open({
+                    title: '修改房源信息',
+                    type: 1,
+                    shade: 0.2,
+                    maxmin:true,
+                    shadeClose: true,
+                    area: [openWH[0] + 'px', openWH[1] + 'px'],
+                    offset: [openWH[2] + 'px', openWH[3] + 'px'],
+                    content: content,
+                });
+
+            } else if (obj.event === 'delete') {
+                layer.confirm('真的删除行么', function (index) {
+                    // obj.del();
+                    // console.log(obj)
+                    $.ajax({
+                        url:"http://localhost:9091/bg/house/resources",
+                        contentType:'application/json',
+                        type: "DELETE",
+                        data:JSON.stringify(obj.data),
+                        success:function(res){
+                            //墨绿深蓝风
+                            layer.alert('删除成功', {
+                                skin: 'layui-layer-lan',
+                                closeBtn: 0
+                            }, function(){
+                                layer.closeAll();
+                                window.location.reload();
+                            });
+                        }
+                    })
+                    layer.close(index);
+                });
+            }
+            else if(obj.event=="showpics"){
+                let dataList = obj.data
+
+                var pics = obj.data.pic.split(',')
+                var picList = []
+                for(var j = 0;j < pics.length;++j){
+                    picList.push({
+                        "alt":obj.data.title,
+                        "pid":j,
+                        "src":pics[j],
+                        thumb:pics[j]}
+                        )
+                }
+                let data = {
+                    title: obj.data.title,
+                    id:obj.data.id,
+                    start:0,
+                    data:picList
+                }
+                layer.photos({
+                    photos:data
+                })
+            }
+        });
+
+    });
+
+
+</script>
+
+<script type="text/javascript" id="picTpl">
+    <i class="fa fa-image" lay-event="showpics"></i>
+</script>
+
+<!--支付方式处理-->
+<script type="text/javascript" id="paymethod">
+    {{#if(d.paymentMethod==1){ }}
+        付一押一
+    {{# }else if(d.paymentMethod==2){}}
+        付三押一
+    {{# }else if(d.paymentMethod==3){}}
+        付六押一
+    {{# }else if(d.paymentMethod==4){}}
+        年付押一
+    {{# }else if(d.paymentMethod==5){}}
+        其他
+    {{# }}}
+</script>
+<!--楼栋处理-->
+<script type="text/javascript" id="building">
+    {{d.buildingNum}}栋{{d.buildingUnit}}单元{{d.buildingFloorNum}}号
+</script>

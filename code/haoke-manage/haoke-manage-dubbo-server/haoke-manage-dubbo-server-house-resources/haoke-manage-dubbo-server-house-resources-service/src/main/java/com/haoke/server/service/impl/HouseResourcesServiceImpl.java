@@ -10,6 +10,8 @@ import com.haoke.server.vo.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @author Auspice Tian
  * @time 2021-03-16 21:03
@@ -34,6 +36,11 @@ public class HouseResourcesServiceImpl
     }
 
     @Override
+    public int deleteHouseResourcesById(Long id) {
+        return super.deleteById(id);
+    }
+
+    @Override
     public PageInfo<HouseResources> queryHouseResourcesList(int page, int pageSize, HouseResources queryCondition) {
         QueryWrapper<HouseResources> queryWrapper = new QueryWrapper<HouseResources>(queryCondition);
         queryWrapper.orderByDesc("updated");//按更新时间降序排列
@@ -50,6 +57,15 @@ public class HouseResourcesServiceImpl
     @Override
     public boolean updateHouseResources(HouseResources houseResources) {
         return super.update(houseResources)==1;
+    }
+
+    @Override
+    public List<HouseResources> queryHouseResourcesAllList(HouseResources queryCondition) {
+        QueryWrapper<HouseResources> queryWrapper =  new QueryWrapper<HouseResources>(queryCondition);
+        queryWrapper.orderByDesc("updated");//按更新时间降序排列
+
+
+        return this.queryAll(queryWrapper);
     }
 
 

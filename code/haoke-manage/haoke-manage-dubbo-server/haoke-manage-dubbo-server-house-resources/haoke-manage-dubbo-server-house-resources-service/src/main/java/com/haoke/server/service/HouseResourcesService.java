@@ -3,6 +3,8 @@ package com.haoke.server.service;
 import com.haoke.server.pojo.HouseResources;
 import com.haoke.server.vo.PageInfo;
 
+import java.util.List;
+
 /**
  * @author Auspice Tian
  * @time 2021-03-16 18:49
@@ -15,6 +17,8 @@ public interface HouseResourcesService {
      * @return -1:输入的参数不符合要求，0：数据插入数据库失败，1：成功
      */
     int saveHouseResources(HouseResources houseResources);
+
+    int deleteHouseResourcesById(Long id);
 
     PageInfo<HouseResources> queryHouseResourcesList(int page, int pageSize, HouseResources queryCondition);
 
@@ -33,4 +37,6 @@ public interface HouseResourcesService {
      * @return
      */
     boolean updateHouseResources(HouseResources houseResources);
+
+    List<HouseResources> queryHouseResourcesAllList(HouseResources queryCondition);
 }

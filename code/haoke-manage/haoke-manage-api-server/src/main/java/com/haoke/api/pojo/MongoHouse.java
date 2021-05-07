@@ -26,7 +26,7 @@ public class MongoHouse {
     @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId id;
 
-    private Long hid;
+    private String estate_id;
     private String title;
     private Float[] loc;
 }

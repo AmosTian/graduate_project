@@ -35,7 +35,7 @@ public class HouseResources extends BasePojo {
     /**
      * 楼盘id
      */
-    private Long estateId;
+    private String estateId;
 
     /**
      * 楼号（栋）

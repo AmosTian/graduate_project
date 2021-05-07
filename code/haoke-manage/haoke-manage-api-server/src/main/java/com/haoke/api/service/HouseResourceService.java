@@ -3,10 +3,13 @@ package com.haoke.api.service;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.haoke.api.vo.Pagination;
 import com.haoke.api.vo.TableResult;
+import com.haoke.api.vo.bgVO.BGTableResult;
 import com.haoke.server.api.ApiHouseResourcesService;
 import com.haoke.server.pojo.HouseResources;
 import com.haoke.server.vo.PageInfo;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author Auspice Tian
@@ -30,8 +33,18 @@ public class HouseResourceService {
         PageInfo<HouseResources> pageInfo
                 = this.apiHouseResourcesService.queryHouseResourcesList(currentPage, pageSize, houseResources);
 
-        return new TableResult(
-                pageInfo.getRecords(), new Pagination(currentPage, pageSize, pageInfo.getTotal()));
+        return new TableResult(pageInfo.getRecords(), new Pagination(currentPage, pageSize, pageInfo.getTotal()));
+    }
+
+    public BGTableResult querybgList(HouseResources houseResources, Integer currentPage, Integer pageSize){
+        PageInfo<HouseResources> pageInfo
+                = this.apiHouseResourcesService.queryHouseResourcesList(currentPage, pageSize, houseResources);
+
+        return new BGTableResult(
+                "0",
+                "success",
+                pageInfo.getTotal(),
+                pageInfo.getRecords());
     }
 
     /*
@@ -48,5 +61,19 @@ public class HouseResourceService {
 
     public boolean update(HouseResources houseResources) {
         return this.apiHouseResourcesService.updateHouseResources(houseResources);
+    }
+
+    public BGTableResult querybgAllList(HouseResources houseResources) {
+        List<HouseResources> list = this.apiHouseResourcesService.queryHouseResourcesAllList(houseResources);
+
+        return new BGTableResult(
+                "0",
+                "success",
+                list.size(),
+                list);
+    }
+
+    public int delete(HouseResources houseResources) {
+        return this.apiHouseResourcesService.deleteHouseResourcesById(houseResources.getId());
     }
 }

@@ -77,8 +77,6 @@ class EditResource extends React.Component{
 
   constructor(props){
     super(props);
-    console.log("====传来的信息=====")
-    console.log(this.props.record)
     this.state={
       visible:false,
       pics:new Set()
@@ -100,7 +98,6 @@ class EditResource extends React.Component{
   };
 
   handleSave = () => {
-
     const { dispatch, form, record } = this.props;
     form.validateFieldsAndScroll((err, values) => {
 
@@ -165,9 +162,6 @@ class EditResource extends React.Component{
           values.pic = record.pic;
         }
 
-
-        console.log("====提交的信息=====")
-        console.log(values)
         dispatch({
           type: 'house/updateHouseForm',
           payload: values,

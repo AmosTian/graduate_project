@@ -30,8 +30,8 @@ public abstract class BaseServiceImpl<T extends BasePojo> {
      *
      * @return
      */
-    public List<T> queryAll() {
-        return this.mapper.selectList(null);
+    public List<T> queryAll(QueryWrapper<T> queryWrapper) {
+        return this.mapper.selectList(queryWrapper);
     }
 
     /**

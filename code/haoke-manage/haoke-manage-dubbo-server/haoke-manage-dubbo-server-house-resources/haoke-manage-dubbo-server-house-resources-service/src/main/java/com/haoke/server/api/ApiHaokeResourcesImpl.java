@@ -6,6 +6,8 @@ import com.haoke.server.service.HouseResourcesService;
 import com.haoke.server.vo.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 /**
  * @author Auspice Tian
  * @time 2021-03-16 21:16
@@ -22,6 +24,11 @@ public class ApiHaokeResourcesImpl implements ApiHouseResourcesService{
     @Override
     public int saveHouseResources(HouseResources houseResources) {
         return this.houseResourcesService.saveHouseResources(houseResources);
+    }
+
+    @Override
+    public int deleteHouseResourcesById(Long id) {
+        return this.houseResourcesService.deleteHouseResourcesById(id);
     }
 
     @Override
@@ -43,5 +50,10 @@ public class ApiHaokeResourcesImpl implements ApiHouseResourcesService{
     @Override
     public boolean updateHouseResources(HouseResources houseResources) {
         return this.houseResourcesService.updateHouseResources(houseResources);
+    }
+
+    @Override
+    public List<HouseResources> queryHouseResourcesAllList(HouseResources queryCondition) {
+        return this.houseResourcesService.queryHouseResourcesAllList(queryCondition);
     }
 }

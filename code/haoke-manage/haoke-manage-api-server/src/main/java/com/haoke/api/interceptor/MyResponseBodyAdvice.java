@@ -1,7 +1,7 @@
 package com.haoke.api.interceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.haoke.api.controller.GraphQLController;
+import com.haoke.api.controller.frontController.GraphQLController;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;

@@ -3,6 +3,7 @@ package com.haoke.api.service;
 import com.haoke.api.pojo.MongoHouse;
 import com.haoke.api.vo.map.MapHouseDataResult;
 import com.haoke.api.vo.map.MapHouseXY;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -49,7 +50,16 @@ public class MongoHouseService {
     private MongoTemplate mongoTemplate;
 
     /*
-    * 从mongo中产讯数据，返回地图房源数据
+    * 向mongo中添加数据，返回是否成功
+    *
+    * */
+    public boolean addHouseData(MongoHouse mongoHouse){
+        this.mongoTemplate.insert(mongoHouse);
+        return true;
+    }
+
+    /*
+    * 从mongo中查询数据，返回地图房源数据
     * */
     public MapHouseDataResult queryHouseData(Float lng,Float lat,Integer zoom){
 

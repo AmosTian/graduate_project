@@ -93,17 +93,15 @@ class HousingList extends PureComponent {
   reload(){// 刷新当前页面
     const { dispatch } = this.props;
     dispatch({
-      type: 'houseResource/fetch'
-    });
+      type: 'houseResource/fetchHousing'
+    })
   }
 
   // 当组件挂载完成后执行加载数据
   componentDidMount() {
-    console.log(this.props.houseResource.data.list)
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'houseResource/fetch',
-      // type: 'rule/fetch',
+    // 加载数据
+    this.props.dispatch({
+      type: 'houseResource/fetchHousing',
     });
   }
 
@@ -338,7 +336,7 @@ class HousingList extends PureComponent {
   }
 
   render() {
-    const {// 将this.pros.houseResource.data绑定到houseResource
+    const {// 将this.pros.houseResource.data绑定到housing
       houseResource: { data },
       loading,// 设置表单的加载状态，为true，则显示加载数据 反之，显示数据
     } = this.props;
