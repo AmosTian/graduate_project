@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: example-elasticsearch
+
+  data:
+    elasticsearch:
+      cluster-name: es-haoke-cluster
+      cluster-nodes: 8.140.130.91:9300
