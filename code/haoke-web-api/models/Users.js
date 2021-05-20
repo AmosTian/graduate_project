@@ -33,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'users',
+    tableName: 'USERS',
     timestamps: false
   });
 };

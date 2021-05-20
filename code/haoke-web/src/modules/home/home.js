@@ -43,28 +43,11 @@ class Home extends React.Component {
       globalLoading: true,
       mapShowFlag: false,
       calcShowFlag: false,
-      searchBarFlag: false
+      searchBarFlag: false,
+      hotWord:""
     };
   }
   componentDidMount = () => {
-    // axios.post('/homes/swipe').then((data)=>{
-    //   this.setState({
-    //     swipeData: data.data.list,
-    //     swipeLoading: true
-    //   })
-    // });
-    // axios.post('/homes/menu').then((data)=>{
-    //   this.setState({
-    //     menuData: data.data.list,
-    //     menuLoading: true,
-    //     globalLoading: false
-    //   })
-    // });
-    /*let swipe = new Promise((resolve, reject) => {
-      axios.get('http://127.0.0.1:9091/ad').then((data)=>{
-        resolve(data.data.list);
-      });
-    })*/
     //首页轮播图
     let swipe = new Promise((resolve, reject) => {
       client.query({query: GET_INDEX_ADS}).then(result =>
@@ -106,7 +89,10 @@ class Home extends React.Component {
         infoLoading: true,
         faqLoading: true,
         houseLoading: true,
-        globalLoading: false
+        globalLoading: false,
+        searchBarFlag:false,
+        searchData:[],
+        hotWord:""
       })
       // this.setState({
       //   globalLoading: false
@@ -120,8 +106,39 @@ class Home extends React.Component {
     this.setState({calcShowFlag:false});
   }
   hideSearchBar = () => {
-    this.setState({searchBarFlag:false});
+    this.setState({
+      searchBarFlag:false,
+      searchKeyWord:""
+    });
   }
+  search = (event, data) =>{
+    let value = data.value ? data.value : this.state.searchKeyWord;
+    let _this =this;
+    let page = data.page ? data.page: 1;
+
+    this.setState({
+      searchKeyWord:value
+    });
+
+    _this.searchHandle();
+    axios.get('http://127.0.0.1:9091/housing/search?keyWord='+value+'&page='+page).then((data)=>{
+      if(data.list.length != 0)
+        _this.setState({searchData:data.list});
+      else
+        _this.setState({searchData:[]});
+
+      _this.setState({
+        totalPage:data.totalPage,
+        hotWord: data.hotWord
+      })
+    });
+  }
+  searchHandle = () => {
+    this.setState({
+      searchBarFlag: true
+    })
+  }
+
   handleMenu = (name) => {
     switch(name){
       case '地图找房':
@@ -149,11 +166,7 @@ class Home extends React.Component {
         break;
     }
   }
-  searchHandle = () => {
-    this.setState({
-      searchBarFlag: true
-    })
-  }
+
   render() {
     // 轮播图渲染
     const swipeLoading = this.state.swipeLoading;
@@ -254,12 +267,18 @@ class Home extends React.Component {
       <div className='home-container'>
         {this.state.mapShowFlag?<MapHouse hideMap={this.hideMap}/>:null}
         {this.state.calcShowFlag?<Calculator hideCalc={this.hideCalc}/>:null}
-        {this.state.searchBarFlag?<SearchBar hideSearchBar={this.hideSearchBar}/>:null}
+        {this.state.searchBarFlag
+            ? <SearchBar hideSearchBar={this.hideSearchBar} hotWord={this.state.hotWord}  searchPage={this.search}
+                         searchData={this.state.searchData} totalPage={this.state.totalPage} />
+           : null}
         <Dimmer inverted active={this.state.globalLoading} page>
           <Loader>Loading</Loader>
         </Dimmer>
         <div className="home-topbar">
-          <Input onBlur={this.hideSearchBar} onFocus={this.searchHandle} fluid icon={{ name: 'search', circular: true, link: true }} placeholder='搜房源...' />
+          {/*onChange={this.search.bind(this) }*/}
+          {/*onBlur={this.hideSearchBar} onClick={this.searchHandle}*/}
+            <Input fluid onChange={this.search.bind(this) } value = {this.state.searchKeyWord}
+                   icon={{ name: 'search', circular: true, link: true }} placeholder='搜房源...' />
         </div>
         <div className="home-content">
           {swipe}

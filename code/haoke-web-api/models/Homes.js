@@ -50,7 +50,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    tableName: 'homes',
+    tableName: 'HOMES',
     timestamps: false
   });
 };

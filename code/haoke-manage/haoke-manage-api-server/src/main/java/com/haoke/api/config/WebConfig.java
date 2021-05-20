@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @current haoke-manage-com.haoke.api.config
  */
 
-//@Configuration
+@Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
@@ -23,6 +23,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //所有请求都要经过拦截器
-        registry.addInterceptor(redisInterceptor).addPathPatterns("/**");
+//        registry.addInterceptor(redisInterceptor).addPathPatterns("/**");
     }
 }

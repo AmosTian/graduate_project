@@ -20,7 +20,7 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: '1'
     }
   }, {
-    tableName: 'map',
+    tableName: 'MAP',
     timestamps: false
   });
 };

@@ -3,6 +3,7 @@ package com.es.rest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import org.apache.commons.io.FileUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.*;
@@ -10,8 +11,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,8 +31,7 @@ public class TestRest {
     public void init(){
         RestClientBuilder builder = RestClient.builder(
                 new HttpHost("8.140.130.91",9200,"http"),
-                new HttpHost("8.140.130.91",9201,"http"),
-                new HttpHost("8.140.130.91",9202,"http")
+                new HttpHost("82.157.25.57",9202,"http")
         );
 
         //创建失败
@@ -47,6 +49,30 @@ public class TestRest {
     public void after() throws IOException {
         //应用关闭，客户端关闭
         restClient.close();
+    }
+
+    /*
+    * 批量插入数据
+    * */
+    @Test
+    public void bulk() throws Exception{
+        Request request = new Request("POST", "/haoke/house/_bulk");
+        List<String> lines = FileUtils.readLines(new File("E:\\idea\\graduateProject\\tylj-data.json"), "UTF-8");
+        //data.json中  每一行都是一个文档
+        String createStr = "{\"index\": {\"_index\":\"haoke\",\"_type\":\"house\"}}";
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        for (String line : lines) {
+            sb.append(createStr + "\n" + line + "\n");
+            if (count >= 100) {
+                request.setJsonEntity(sb.toString());
+                Response response = this.restClient.performRequest(request);
+
+                count = 0;
+                sb = new StringBuilder();
+            }
+            count++;
+        }
     }
 
     // 测试集群状态

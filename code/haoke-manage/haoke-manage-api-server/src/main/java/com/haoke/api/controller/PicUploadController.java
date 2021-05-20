@@ -26,8 +26,8 @@ public class PicUploadController {
     @Autowired
     private PicUploadTencentService picUploadTencentService;
 
-/*    @Autowired
-    private PicUploadFileSystemService picUploadService;*/
+    @Autowired
+    private PicUploadFileSystemService picUploadService;
     /**
      * @param file
      * @return

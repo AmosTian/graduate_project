@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName("tb_house_resources")
+@TableName("TB_HOUSE_RESOURCES")
 public class HouseResources extends BasePojo {
 
     private static final long serialVersionUID = -2471649692631014216L;
@@ -24,7 +24,7 @@ public class HouseResources extends BasePojo {
     /**
      * 房源id
      */
-    @TableId(value = "ID", type = IdType.AUTO)
+    @TableId(value = "ID")
     private Long id;
 
     /**

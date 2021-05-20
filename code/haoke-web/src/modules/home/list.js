@@ -56,7 +56,7 @@ class HouseList extends React.Component {
         loadFlag: true
       })
     })*/
-    client.query({query:QUERY_LIST,variables:{"pageSize":2,"page":1}}).then(result=>{
+    client.query({query:QUERY_LIST,variables:{"pageSize":5,"page":1}}).then(result=>{
       console.log(result)
       this.setState({
         listData: result.data.HouseResourcesList.list,

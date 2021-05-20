@@ -29,7 +29,7 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: '1'
     }
   }, {
-    tableName: 'menus',
+    tableName: 'MENUS',
     timestamps: false
   });
 };

@@ -1,7 +1,7 @@
 package com.haoke.api.interceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.haoke.api.controller.frontController.GraphQLController;
+import com.haoke.api.controller.GraphQLController;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
@@ -53,6 +53,7 @@ public class MyResponseBodyAdvice implements ResponseBodyAdvice {
 
     /*
     * 横切通知
+    * 将所有返回结果缓存
     * */
     @Override
     public Object beforeBodyWrite(Object body,

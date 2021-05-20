@@ -12,7 +12,7 @@ import lombok.Data;
  */
 
 @Data
-@TableName("tb_ad")
+@TableName("TB_AD")
 public class Ad extends BasePojo{
     private static final long serialVersionUID = -493439243433085768L;
 

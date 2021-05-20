@@ -27,15 +27,15 @@ module.exports = {
     /** 模型文件路径 */
     models_path: '/models',
     /** 数据库主机IP */
-    host: '8.140.130.91',
+    host: '82.157.25.57',
     /** 数据库的端口号 */
-    port: 3306,
+    port: 4002,
     /** 数据库类型 */
     type: 'mysql',
     /** 数据库登录用户名 */
-    username: 'root',
+    username: 'mycat',
     /** 数据库密码 */
-    password: 'root',
+    password: 'mycat',
     /** 数据库名称 */
     database: 'myhome',
     /** 是否显示数据库日志 */
