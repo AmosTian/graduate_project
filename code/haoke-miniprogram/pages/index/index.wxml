@@ -1,5 +1,0 @@
-<!--index.wxml-->
-<view class="container">
-<button type="primary" bindtap="login">登录</button>
-<button type="primary" bindtap="checkLogin">检测登录状态</button>
-</view>
