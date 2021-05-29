@@ -3,6 +3,7 @@ import Tloader from 'react-touch-loader';
 import { Item,Icon,Button,Modal,TextArea } from 'semantic-ui-react'
 import axios from 'axios';
 import './tab.css';
+import config from "../../common";
 
 class QuestionModel extends React.Component {
   constructor(props) {
@@ -141,7 +142,7 @@ class LoadMore extends React.Component {
       if(type === 1 || type === 2){
         list.push(
           <Item key={item.id}>
-            <Item.Image size='small' src='http://47.96.21.88:8086/public/1.png' />
+            <Item.Image size='small' src={config.imgBaseUrl+'public/1.png'} />
             <Item.Content verticalAlign='middle'>
               <Item.Header className='info-title'>{item.info_title}</Item.Header>
               <Item.Meta>
