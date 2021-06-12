@@ -38,18 +38,6 @@
               "href": "page/housing/housingAdd.html",
               "icon": "fa fa-plus-square",
               "target": "_self"
-            },
-            {
-              "title": "看房请求",
-              "href": "page/welcome-3.html",
-              "icon": "fa fa-street-view",
-              "target": "_self"
-            },
-            {
-              "title": "租房管理",
-              "href": "page/welcome-3.html",
-              "icon": "fa fa-wrench",
-              "target": "_self"
             }
           ]
         },
